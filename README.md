@@ -41,23 +41,20 @@ CME_Forecasting_Repository/
 │
 ├── data/                              # Data directory (not tracked by git)
 │   ├── raw/                           # Raw data files
-│   │   ├── datos_30_11_2025.txt       # Raw CME data from CDAW
+│   │   ├── datos_30_11_2025.txt       # Raw CME data from CDAW (The nomenclature adopted to define the name of the raw data follows the format: “DD/MM/YYYY.”)
 │   │   ├── SN_y_tot_V2.0.txt          # Annual sunspot data from SILSO
 │   │   └── SN_m_tot_V2.0.txt          # Monthly sunspot data from SILSO
-│   │
+|   |
+│   ├── data_processing/               # Data preprocessing scripts
+│   ├── Lecture_data_CME.py            # Convert raw CME data to CSV
+│   └── README.md                      # Data processing documentation
+│   |
 │   └── processed/                     # Processed data
 │       └── datos_procesados_2025_11_30.csv  # Cleaned CME data
 │
-├── data_processing/                   # Data preprocessing scripts
-│   ├── __init__.py
-│   ├── Lecture_data_CME.py            # Convert raw CME data to CSV
-│   └── README.md                      # Data processing documentation
-│
 ├── scripts/                           # Main analysis scripts
-│   ├── __init__.py
 │   ├── annual_forecasting.py          # ARIMA vs ARIMAX (annual)
 │   ├── monthly_forecasting.py         # SARIMA vs SARIMAX (monthly)
-│   └── config.py                      # Shared configuration parameters
 │
 ├── results/                           # Output directory (not tracked by git)
 │   ├── figures/                       # Generated plots
