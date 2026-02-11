@@ -1,6 +1,4 @@
 # Forecasting-Coronal-Mass-Ejection-Occurrence-Rates-Using-ARIMA-and-ARIMAX-Models
-This repository contains the implementation of ARIMA (AutoRegressive Integrated Moving Average) and ARIMAX (ARIMA with eXogenous variables) models for forecasting Coronal Mass Ejection (CME) occurrence rates.
-
 This repository contains the implementation of ARIMA (AutoRegressive Integrated Moving Average) and ARIMAX (ARIMA with eXogenous variables) models for forecasting Coronal Mass Ejection (CME) occurrence rates. The project evaluates whether sunspot numbers (SSN) can improve CME forecasting accuracy compared to univariate time series models.
 The analysis includes:
 
