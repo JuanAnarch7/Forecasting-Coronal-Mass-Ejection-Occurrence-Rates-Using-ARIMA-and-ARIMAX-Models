@@ -47,7 +47,7 @@ COLOR_TRAIN = '#95A5A6'
 # 1. CONFIGURATION PARAMETERS
 # ================================================================
 
-MIN_SPEED = 1000
+MIN_SPEED = 0
 MIN_WIDTH, MAX_WIDTH = 0, 360
 YEAR_START, YEAR_END = 1996, 2025
 
@@ -177,9 +177,22 @@ for key, value in adf_result[4].items():
     print(f"      {key}: {value:.4f}")
 
 if adf_result[1] < 0.05:
-    print(f"    Series is STATIONARY (p < 0.05)")
+    print(f"   ✓ Series is STATIONARY (p < 0.05) - No differencing needed")
+    diferenciacion_sugerida = 0
 else:
-    print(f"    Series is NON-STATIONARY (p >= 0.05) - Differencing needed")
+    print(f"   ⚠ Series is NON-STATIONARY (p >= 0.05) - Differencing required")
+    # Test first difference
+    diff_series = endog_train.diff().dropna()
+    adf_diff = adfuller(diff_series, autolag='AIC')
+    print(f"\n   ADF test on first difference:")
+    print(f"   ADF Statistic: {adf_diff[0]:.4f}")
+    print(f"   p-value: {adf_diff[1]:.4f}")
+    if adf_diff[1] < 0.05:
+        print(f"   ✓ First difference is stationary - d=1 recommended")
+        diferenciacion_sugerida = 1
+    else:
+        print(f"   ⚠ May need d=2")
+        diferenciacion_sugerida = 2
 
 # Ljung-Box Test for white noise
 lb_result = acorr_ljungbox(endog_train, lags=20, return_df=True)
@@ -234,9 +247,13 @@ modelo_sarima_auto = auto_arima(
     error_action='ignore', 
     suppress_warnings=True, 
     stepwise=True,
-    max_p=5, max_q=5, max_d=2,
     max_P=2, max_Q=2, max_D=1,
-    information_criterion='aic'
+    #Si se recomienda usar un d diferente de 0 se descomenta la linea siguiente y se comenta las demás líneas
+
+    #max_p=5, max_q=5,   #Se descomenta si se recomienda un d diferente de 0
+    max_p=5, max_q=5, max_d=2,  #se comenta si se utiloiza un d diferente de 0
+    information_criterion='aic' #también esta se comenta
+    #d=1        #Se descomenta si se recomienda un d diferente de 0
 )
 
 orden_sarima = modelo_sarima_auto.order
@@ -308,18 +325,20 @@ print("[7b/9] Selecting optimal SARIMAX order on training data...")
 
 modelo_sarimax_auto = auto_arima(
     endog_train, 
-    exogenous=exog_train,
     seasonal=True,
     m=12,
     trace=False,
     error_action='ignore', 
     suppress_warnings=True, 
     stepwise=True,
-    max_p=5, max_q=5, max_d=2,
     max_P=2, max_Q=2, max_D=1,
-    information_criterion='aic'
-)
+    #Si se recomienda usar un d diferente de 0 se descomenta la linea siguiente y se comenta las demás líneas
 
+    #max_p=5, max_q=5,   #Se descomenta si se recomienda un d diferente de 0
+    max_p=5, max_q=5, max_d=2,  #se comenta si se utiloiza un d diferente de 0
+    information_criterion='aic' #también esta se comenta
+    #d=1        #Se descomenta si se recomienda un d diferente de 0
+)
 orden_sarimax = modelo_sarimax_auto.order
 orden_estacional_sarimax = modelo_sarimax_auto.seasonal_order
 print(f"   Order selected: ARIMA{orden_sarimax} × {orden_estacional_sarimax}[12]")
