@@ -255,7 +255,6 @@ print(f"   Order selected: ARIMA{orden_arima}")
 # Fit ARIMA model
 modelo_arima = SARIMAX(
     endog_train,
-    X=exog_train,
     order=orden_arima,
     enforce_stationarity=False,
     enforce_invertibility=False
