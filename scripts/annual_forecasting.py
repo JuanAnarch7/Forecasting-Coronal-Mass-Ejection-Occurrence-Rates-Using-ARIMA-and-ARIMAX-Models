@@ -238,9 +238,15 @@ modelo_arima_auto = auto_arima(
     error_action='ignore', 
     suppress_warnings=True, 
     stepwise=True,
-    max_p=max_order, max_q=max_order, max_d=2,
-    start_p=0, start_q=0,
-    information_criterion='aic'
+    #Si se quieren probar modelos con d=0, d=1 y d=2, se comenta la linea siguiente y se descomenta la linea de abajo
+
+    #max_p=5, max_q=5,                          #se descomenta cuando las lineas siguientes se comentan
+
+    max_p=max_order, max_q=max_order, max_d=2,  #se comentan para utilizar el d sugerido por el ADF
+    start_p=0, start_q=0,                       #este también se comenta
+    information_criterion='aic'                 #este también se comenta
+
+    #d=2                                        #se descomenta cuando las lineas anteriores se comentan
 )
 
 orden_arima = modelo_arima_auto.order
@@ -316,9 +322,15 @@ modelo_arimax_auto = auto_arima(
     error_action='ignore', 
     suppress_warnings=True, 
     stepwise=True,
-    max_p=max_order, max_q=max_order, max_d=2,
-    start_p=0, start_q=0,
-    information_criterion='aic'
+    #Si se quieren probar modelos con d=0, d=1 y d=2, se comenta la linea siguiente y se descomenta la linea de abajo
+
+    #max_p=5, max_q=5,                          #se descomenta cuando las lineas siguientes se comentan
+
+    max_p=max_order, max_q=max_order, max_d=2,  #se comentan para utilizar el d sugerido por el ADF
+    start_p=0, start_q=0,                       #este también se comenta
+    information_criterion='aic'                 #este también se comenta
+
+    #d=2                                        #se descomenta cuando las lineas anteriores se comentan
 )
 orden_arimax = modelo_arimax_auto.order
 print(f"   Order selected: ARIMA{orden_arimax}")
