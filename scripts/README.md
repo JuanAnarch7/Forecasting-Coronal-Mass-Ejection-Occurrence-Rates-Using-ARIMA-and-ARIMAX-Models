@@ -151,7 +151,7 @@ MIN_WIDTH, MAX_WIDTH = 0, 360
 ### Halo CMEs (360° width)
 ```python
 MIN_SPEED = 0
-MIN_WIDTH, MAX_WIDTH = 360, 360
+MIN_WIDTH, MAX_WIDTH = 360, 359
 ```
 
 ### Partial Halo CMEs (120-360°)
