@@ -160,7 +160,7 @@ MIN_SPEED = 0
 MIN_WIDTH, MAX_WIDTH = 120, 359
 ```
 
-### Fast Partial Halo CMEs
+### Moderate Partial Halo CMEs
 ```python
 MIN_SPEED = 450
 MIN_WIDTH, MAX_WIDTH = 20, 120
