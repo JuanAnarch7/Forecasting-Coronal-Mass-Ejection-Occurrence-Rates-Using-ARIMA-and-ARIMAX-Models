@@ -163,7 +163,7 @@ MIN_WIDTH, MAX_WIDTH = 120, 359
 ### Moderate Partial Halo CMEs
 ```python
 MIN_SPEED = 450
-MIN_WIDTH, MAX_WIDTH = 20, 120
+MIN_WIDTH, MAX_WIDTH = 120, 359
 ```
 
 **Note:** After changing filters, rename output files to avoid overwriting previous results.
