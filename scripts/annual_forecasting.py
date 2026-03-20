@@ -49,12 +49,12 @@ COLOR_TRAIN = '#95A5A6'
 # ================================================================
 
 MIN_SPEED = 450
-MIN_WIDTH, MAX_WIDTH = 20, 120
+MIN_WIDTH, MAX_WIDTH = 0, 360
 YEAR_START, YEAR_END = 1996, 2024
 
 # Train/test split configuration
-TRAIN_END_YEAR = 2019  # 80% of data (1996-2019 = 24 years)
-TEST_START_YEAR = 2020  # 20% of data (2020-2024 = 5 years)
+TRAIN_END_YEAR = 2019  # 80% of data (1996-2019 = 26 years)
+TEST_START_YEAR = 2020  # 20% of data (2020-2024 = 3 years)
 
 print("=" * 80)
 print("ARIMA vs ARIMAX MODEL COMPARISON")
@@ -178,8 +178,12 @@ else:
         print(f"   ✓ First difference is stationary - d=1 recommended")
         diferenciacion_sugerida = 1
     else:
-        print(f"   ⚠ May need d=2")
-        diferenciacion_sugerida = 2
+        print(f"   ⚠ Series is NON-STATIONARY (p >= 0.05) - Second-order differencing required")
+        s_diff_series = diff_series.diff().dropna() 
+        adf_s_diff = adfuller(s_diff_series, autolag='AIC') 
+        if adf_s_diff[1] < 0.05:
+            print(f"   ✓ Second difference is stationary - d=2 recommended")
+            diferenciacion_sugerida = 2 
 
 # Ljung-Box Test for white noise (serial correlation)
 max_lags_lb = min(10, len(endog_train)//4)
@@ -230,23 +234,18 @@ print("[8a/9] Selecting optimal ARIMA order on training data...")
 
 # Adjust max_p and max_q based on sample size
 max_order = min(5, len(endog_train)//3)
-
+#max_order = 5
 modelo_arima_auto = auto_arima(
     endog_train, 
     seasonal=False, 
     trace=False,
     error_action='ignore', 
     suppress_warnings=True, 
-    stepwise=True,
-    #Si se quieren probar modelos con d=0, d=1 y d=2, se comenta la linea siguiente y se descomenta la linea de abajo
-
-    #max_p=5, max_q=5,                          #se descomenta cuando las lineas siguientes se comentan
-
-    max_p=max_order, max_q=max_order, max_d=2,  #se comentan para utilizar el d sugerido por el ADF
-    start_p=0, start_q=0,                       #este también se comenta
-    information_criterion='aic'                 #este también se comenta
-
-    #d=2                                        #se descomenta cuando las lineas anteriores se comentan
+    stepwise=False,
+    random_state = 42,
+    start_p=0, start_q=0,
+    information_criterion='aic',
+    d=0
 )
 
 orden_arima = modelo_arima_auto.order
@@ -314,23 +313,20 @@ print("MODEL 2: ARIMAX (WITH SUNSPOT NUMBERS)")
 print("="*80)
 print("[8b/9] Selecting optimal ARIMAX order on training data...")
 
+
+  # Adjust max_p and max_q based on sample size
+max_order = min(5, len(endog_train)//3)
 modelo_arimax_auto = auto_arima(
     endog_train, 
-    exogenous=exog_train,
     seasonal=False, 
     trace=False,
     error_action='ignore', 
     suppress_warnings=True, 
-    stepwise=True,
-    #Si se quieren probar modelos con d=0, d=1 y d=2, se comenta la linea siguiente y se descomenta la linea de abajo
-
-    #max_p=5, max_q=5,                          #se descomenta cuando las lineas siguientes se comentan
-
-    max_p=max_order, max_q=max_order, max_d=2,  #se comentan para utilizar el d sugerido por el ADF
-    start_p=0, start_q=0,                       #este también se comenta
-    information_criterion='aic'                 #este también se comenta
-
-    #d=2                                        #se descomenta cuando las lineas anteriores se comentan
+    stepwise=False,
+    random_state = 42,
+    start_p=0, start_q=0,
+    information_criterion='aic',
+    d=0
 )
 orden_arimax = modelo_arimax_auto.order
 print(f"   Order selected: ARIMA{orden_arimax}")
