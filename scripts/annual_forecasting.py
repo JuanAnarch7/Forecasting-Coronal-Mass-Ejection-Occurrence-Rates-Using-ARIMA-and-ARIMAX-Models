@@ -53,8 +53,8 @@ MIN_WIDTH, MAX_WIDTH = 0, 360
 YEAR_START, YEAR_END = 1996, 2024
 
 # Train/test split configuration
-TRAIN_END_YEAR = 2019  # 80% of data (1996-2019 = 26 years)
-TEST_START_YEAR = 2020  # 20% of data (2020-2024 = 3 years)
+TRAIN_END_YEAR = 2019  # 80% of data (1996-2019 = 24 years)
+TEST_START_YEAR = 2020  # 20% of data (2020-2024 = 4 years)
 
 print("=" * 80)
 print("ARIMA vs ARIMAX MODEL COMPARISON")
@@ -94,7 +94,7 @@ conteo_anual = (
 full_years = pd.RangeIndex(YEAR_START, YEAR_END + 1)
 conteo_anual = (
     conteo_anual
-    .reindex(full_years, fill_value=0)  # Fill missing years with 0
+    .reindex(full_years, fill_value=0)  
     .reset_index()
 )
 conteo_anual.columns = ['Year', 'CMEs_filtradas']
@@ -113,16 +113,15 @@ df_sn['Year'] = df_sn['Year'].astype(int)
 df_sn = df_sn[(df_sn['Year'] >= YEAR_START) & (df_sn['Year'] <= YEAR_END)]
 
 # ================================================================
-# 5. MERGE DATASETS (NOW SAFE - conteo_anual HAS ALL YEARS)
+# 5. MERGE DATASETS 
 # ================================================================
 print("\n[4/9] Merging datasets...")
 
-# Use inner join - now safe because conteo_anual has all years with 0s filled
 df_merged = pd.merge(df_sn, conteo_anual, on='Year', how='inner')
 
 print(f"   Temporal range: {df_merged['Year'].min()} - {df_merged['Year'].max()}")
 print(f"   Total observations: {len(df_merged)}")
-print(f"   NaN values in CMEs: {df_merged['CMEs_filtradas'].isna().sum()}")  # Should be 0
+print(f"   NaN values in CMEs: {df_merged['CMEs_filtradas'].isna().sum()}")  
 
 # ================================================================
 # 6. TRAIN/TEST SPLIT
@@ -202,7 +201,7 @@ else:
 print("="*80)
 
 # ================================================================
-# 8. ACF/PACF ANALYSIS (for model justification)
+# 8. ACF/PACF ANALYSIS 
 # ================================================================
 print("\n[7/9] Generating ACF/PACF plots for model selection justification...")
 
@@ -314,7 +313,7 @@ print("="*80)
 print("[8b/9] Selecting optimal ARIMAX order on training data...")
 
 
-  # Adjust max_p and max_q based on sample size
+
 max_order = min(5, len(endog_train)//3)
 modelo_arimax_auto = auto_arima(
     endog_train, 
@@ -418,7 +417,7 @@ else:
 print("="*80)
 
 # ========================================================================
-# 12. PUBLICATION-QUALITY VISUALIZATION (NUMPY ARRAYS)
+# 12. VISUALIZATION 
 # ========================================================================
 
 # ========== FIGURE 1: FORECAST COMPARISON ==========
@@ -570,7 +569,7 @@ df_results = pd.DataFrame({
 df_results.to_csv("forecast_results_annual_with_validation.csv", index=False)
 print("    Numerical results saved: 'forecast_results_annual_with_validation.csv'")
 
-# Save comprehensive metrics summary
+# Save summary
 with open('model_metrics_summary_annual.txt', 'w', encoding='utf-8') as f:
     f.write("="*80 + "\n")
     f.write("ARIMA vs ARIMAX MODEL COMPARISON - ANNUAL CME FORECASTING\n")
