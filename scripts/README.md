@@ -264,12 +264,11 @@ Scripts use **automatic model order selection** via `pmdarima.auto_arima`:
 
 **Annual models:**
 - max_p = 5, max_q = 5 (or adaptive based on sample size)
-- max_d = 2
 - Selection criterion: AIC
 
 **Monthly models:**
-- max_p = 5, max_q = 5, max_d = 2
-- max_P = 2, max_Q = 2, max_D = 1
+- max_p = 5, max_q = 5
+- max_P = 2, max_Q = 2
 - Seasonal period: m = 12
 - Selection criterion: AIC
 
