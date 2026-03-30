@@ -190,8 +190,10 @@ TRAIN_END = '2019-02'   # Format: 'YYYY-MM'
 TEST_START = '2019-03'  # Format: 'YYYY-MM'
 ```
 # After reviewing the ADF test output in the console, 
-# set the 'd' parameter manually in both ARIMA and ARIMAX sections (SARIMA AND SARIMAX at monthly resolution):
+set the 'd' parameter manually in both ARIMA and ARIMAX sections (SARIMA AND SARIMAX at monthly resolution):
 
+
+```python
 modelo_arima_auto = auto_arima(
     endog_train,
     seasonal=False,
@@ -199,6 +201,8 @@ modelo_arima_auto = auto_arima(
     information_criterion='aic',
     d=1  # <--- SET MANUALLY BASED ON ADF TEST RESULTS
 )
+```
+
 
 ### Customizing Output Filenames
 
