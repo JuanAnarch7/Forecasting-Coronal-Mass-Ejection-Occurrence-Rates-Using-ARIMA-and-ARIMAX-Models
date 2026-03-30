@@ -189,8 +189,9 @@ YEAR_START, YEAR_END = 1996, 2025
 TRAIN_END = '2019-02'   # Format: 'YYYY-MM'
 TEST_START = '2019-03'  # Format: 'YYYY-MM'
 ```
-# After reviewing the ADF test output in the console, 
-set the 'd' parameter manually in both ARIMA and ARIMAX sections (SARIMA AND SARIMAX at monthly resolution):
+# Setting the differentiation parameter
+
+After reviewing the ADF test output in the console, set the 'd' parameter manually in both ARIMA and ARIMAX sections (SARIMA AND SARIMAX at monthly resolution):
 
 
 ```python
