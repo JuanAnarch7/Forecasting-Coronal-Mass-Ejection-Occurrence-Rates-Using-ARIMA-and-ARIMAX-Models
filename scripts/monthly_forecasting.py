@@ -41,7 +41,11 @@ COLOR_ARIMA = '#3498DB'
 COLOR_ARIMAX = '#E74C3C'
 COLOR_GRID = '#BDC3C7'
 COLOR_TRAIN = '#95A5A6'
-
+# ================================================================
+# 0. GLOBAL REPRODUCIBILITY SEED
+# ================================================================
+RANDOM_STATE = 42
+np.random.seed(RANDOM_STATE)
 # =================================================================
 # 1. CONFIGURATION PARAMETERS
 # ================================================================
@@ -54,8 +58,6 @@ YEAR_START, YEAR_END = 1996, 2025
 TRAIN_END = '2019-02'
 TEST_START = '2019-03'
 
-# Reproducibility seed for auto_arima stochastic search
-RANDOM_STATE = 42
 
 print("=" * 80)
 print("SARIMA vs SARIMAX MODEL COMPARISON WITH OUT-OF-SAMPLE VALIDATION")
