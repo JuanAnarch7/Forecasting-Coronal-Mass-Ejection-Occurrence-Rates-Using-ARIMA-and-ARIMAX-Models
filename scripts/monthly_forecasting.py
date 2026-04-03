@@ -349,7 +349,7 @@ modelo_sarimax_auto = auto_arima(
     suppress_warnings=True,
     stepwise=False,
     random_state=RANDOM_STATE,
-    d = 1,
+    d = None,
     max_P=2, max_Q=2, max_D=1,
     max_p=5, max_q=5,
     start_p=0, start_q=0,
