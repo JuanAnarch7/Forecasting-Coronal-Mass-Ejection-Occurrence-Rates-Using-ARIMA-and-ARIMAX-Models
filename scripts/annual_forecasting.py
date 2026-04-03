@@ -310,7 +310,7 @@ modelo_arimax_auto = auto_arima(
     start_p=0, start_q=0,
     max_p=max_order, max_q=max_order,
     information_criterion='aic',
-    d=1
+    d=None
 )
 orden_arimax = modelo_arimax_auto.order
 print(f"   Order selected: ARIMAX{orden_arimax}")
