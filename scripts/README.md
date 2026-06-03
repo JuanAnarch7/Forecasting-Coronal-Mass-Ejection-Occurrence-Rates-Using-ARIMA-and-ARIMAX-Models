@@ -129,7 +129,70 @@ TEST_START = '2019-03' # First month of test set
 cd scripts
 python monthly_forecasting.py
 ```
+---
 
+#### `pure_forecast.py`
+**Purpose:** Generate genuine out-of-sample forecasts of CME occurrence rates for 2025–2026 using models trained on the complete historical record (1996–2024), with ARIMAX predictions conditioned on three SILSO solar-cycle scenarios
+
+This script differs fundamentally from the validation scripts above: there is no held-out test set. Both ARIMA and ARIMAX are fitted on all available data and then projected strictly into the future. The ARIMAX model requires exogenous sunspot number (SSN) inputs for the forecast window, which are sourced from official SILSO predictions rather than observations.
+
+**Configuration parameters** (editable at top of script):
+```python
+MIN_SPEED            = 750    # Minimum CME speed (km/s)
+MIN_WIDTH, MAX_WIDTH = 0, 360 # Angular width range (degrees)
+YEAR_START           = 1996   # Start of training period
+YEAR_TRAIN_END       = 2024   # End of training period (full dataset)
+FORECAST_YEARS       = [2025, 2026]
+```
+
+**SILSO solar-cycle scenarios:**
+
+The script embeds monthly SSN predictions from three official SILSO forecasting methods, which are averaged to annual values for use as ARIMAX exogenous inputs:
+
+| Scenario | Label | Description |
+|----------|-------|-------------|
+| `SC` | Standard Curve | SILSO Standard Curve method |
+| `CM` | Combined Method | SILSO Combined Method |
+| `ML` | McNish & Lincoln | SILSO McNish & Lincoln method |
+
+For 2025, the annual SSN is computed by combining observed monthly values (January–August, read from `SN_m_tot_V2.0.txt` if available) with SILSO-projected values for September–December. For 2026, the annual value is the mean of all twelve SILSO monthly projections. A console warning is issued if the monthly file is absent and only the SILSO months are used.
+
+**Note:** The ARIMA forecast is scenario-independent (it uses no exogenous input), so a single ARIMA projection is computed and displayed alongside the three ARIMAX scenario curves.
+
+**Outputs** (saved to the working directory):
+
+1. **`forecast_pure_2025_2026.pdf`**
+   - Two-panel publication-quality figure
+   - Upper panel: observed CME counts (1996–2024) with in-sample fitted curves, ARIMA point forecast with 95% CI, and three ARIMAX scenario forecasts with 95% CI each. Includes a zoomed inset on the 2023–2026 window for readability
+   - Lower panel: historical SSN time series and the three SILSO projected SSN scenarios, with a shaded forecast region
+
+2. **`forecast_pure_2025_2026.csv`**
+   - Numerical forecast table with one row per (year, scenario) combination
+   - Columns: `Year`, `SILSO_scenario`, `SSN_projected`, `ARIMA_forecast`, `ARIMA_CI_lower_95`, `ARIMA_CI_upper_95`, `ARIMAX_forecast`, `ARIMAX_CI_lower_95`, `ARIMAX_CI_upper_95`
+
+3. **`forecast_pure_summary.txt`**
+   - Plain-text summary of the full run
+   - Includes training period, CME filter, stationarity test results, selected model orders with AIC/RMSE/R², projected SSN by scenario, and the complete forecast table with notes on methodology
+
+**Execution:**
+```bash
+cd scripts
+python pure_forecast.py
+```
+
+**Required input files** (same directory as script, or adjust paths):
+- `datos_procesados_2025_11_30.csv` — processed CME catalog
+- `SN_y_tot_V2.0.txt` — annual sunspot numbers (SILSO V2.0)
+- `SN_m_tot_V2.0.txt` — monthly sunspot numbers (optional; used to build the 2025 hybrid annual SSN)
+
+**Key methodological notes:**
+
+- Reproducibility is enforced via `numpy.random.seed(42)`, so results are deterministic given the same data and `auto_arima` configuration.
+- The differencing order `d` for ARIMA is selected automatically from the ADF test result; ARIMAX selects its own `d` independently via `auto_arima` (set to `d=None`).
+- Confidence intervals are computed at the 95% level; lower bounds are clipped at zero (CME counts cannot be negative).
+- In-sample fit metrics (RMSE, MAE, R²) are reported for both models as a quality check, but they do not constitute out-of-sample validation — interpret with care.
+
+---
 ---
 
 ## Analyzing Different CME Subpopulations
