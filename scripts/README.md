@@ -12,7 +12,7 @@ Scripts are provided for forecasting analyses performed at two temporal resoluti
 
 - **Annual temporal resolution** → ARIMA vs ARIMAX models
 - **Monthly temporal resolution** → SARIMA vs SARIMAX models (with seasonal components)
-- - **Pure Forecast** → Prospective forecasting
+- **Pure Forecast** → Prospective forecasting
 
 Each script performs a complete forecasting pipeline, including:
 - Stationarity diagnostics (ADF test)
